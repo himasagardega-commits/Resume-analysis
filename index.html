@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="ResumeAI provides ATS-style resume analysis and job matching for ambitious candidates.">
+  <title>ResumeAI | ATS Resume Analyzer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="site-header">
+      <a class="brand" href="#" aria-label="ResumeAI home" data-nav="home">
+        <span class="brand-mark"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3.5h7.5L19 8v12.5H7z"/><path d="M14 3.5V8h5M10 12h6M10 15.5h6M10 19h3"/></svg><span class="brand-spark">✦</span></span>
+        <span>Resume<span>AI</span></span>
+      </a>
+      <nav class="main-nav" aria-label="Main navigation">
+        <a href="#" data-nav="home">Home</a>
+        <a href="#" data-nav="templates">Templates</a>
+        <a href="#how-it-works">How it works</a>
+        <a href="#features">Features</a>
+        <a href="#about">About</a>
+      </nav>
+      <button class="header-cta" data-nav="home">Analyze resume <span aria-hidden="true">↗</span></button>
+      <button class="menu-toggle" type="button" aria-label="Open navigation">☰</button>
+    </header>
+
+    <main>
+      <section id="home-view" class="view active-view">
+        <div class="hero-grid">
+          <div class="hero-copy reveal">
+            <div class="eyebrow"><span class="eyebrow-dot"></span> AI-powered career clarity</div>
+            <h1>Make your resume<br><em>impossible to miss.</em></h1>
+            <p class="hero-lede">Upload your resume and get an ATS-style analysis, job matching score, missing skills, and precise suggestions to move your application forward.</p>
+            <div class="hero-proof"><span class="avatar-stack"><i>R</i><i>M</i><i>A</i></span><span><strong>Built for your next opportunity</strong><br><small>Evidence-based feedback, not guesswork.</small></span></div>
+          </div>
+          <div class="upload-panel reveal delay-1" id="upload-panel">
+            <div class="panel-kicker"><span>01</span> START WITH YOUR RESUME</div>
+            <div class="drop-zone" id="drop-zone" tabindex="0" role="button" aria-label="Choose a PDF resume">
+              <div class="upload-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 16V4m0 0L7.5 8.5M12 4l4.5 4.5M5 14v5h14v-5"/></svg></div>
+              <h2>Drop your resume here</h2>
+              <p>or <button class="text-button" id="choose-resume" type="button">browse your files</button></p>
+              <span class="file-note">PDF only · Max file size 10 MB</span>
+              <input id="resume-input" type="file" accept="application/pdf,.pdf" hidden>
+            </div>
+            <div class="file-preview hidden" id="file-preview">
+              <div class="pdf-badge">PDF</div><div class="file-meta"><strong id="file-name">resume.pdf</strong><span id="file-size">0 KB</span><div class="progress-track"><span id="upload-progress"></span></div></div><button id="remove-file" class="icon-button" type="button" aria-label="Remove file">×</button>
+            </div>
+            <button class="primary-button wide-button" id="continue-button" type="button" disabled>Upload &amp; continue <span>→</span></button>
+            <p class="privacy-note"><span>⌁</span> Your resume stays private and secure.</p>
+          </div>
+        </div>
+        <div class="stats-strip reveal delay-2"><div><strong>10k+</strong><span>resumes analyzed</span></div><div><strong>164</strong><span>job roles covered</span></div><div><strong>11</strong><span>NLP signals used</span></div><div class="strip-note">A sharper resume starts<br>with a clearer signal.</div></div>
+        <div class="section-anchor" id="how-it-works"><div><span class="section-label">THE PROCESS</span><h2>From upload to a<br><em>stronger application.</em></h2></div><p>ResumeAI turns your resume into an actionable map. Understand what is working, see what is missing, and know exactly what to change.</p></div>
+        <div class="steps-row"><div class="step-item"><span>01</span><h3>Upload</h3><p>Start with the resume you have today.</p></div><div class="step-item"><span>02</span><h3>Match</h3><p>Choose a target role or add a job description.</p></div><div class="step-item"><span>03</span><h3>Improve</h3><p>Use specific feedback to make your story stronger.</p></div></div>
+        <div class="feature-band" id="features"><span class="section-label">DESIGNED FOR MOMENTUM</span><h2>Clarity at every<br><em>career turn.</em></h2><div class="feature-grid"><article><span class="feature-icon">◎</span><h3>ATS-style scoring</h3><p>A weighted view of skills, keywords, structure, and experience.</p></article><article><span class="feature-icon">↗</span><h3>Specific next steps</h3><p>Suggestions grounded in what your resume actually says.</p></article><article><span class="feature-icon">↕</span><h3>Progress you can see</h3><p>Compare your original and corrected resume side by side.</p></article></div></div>
+      </section>
+
+      <section id="job-view" class="view">
+        <div class="flow-layout"><div class="flow-intro"><span class="section-label">STEP 02 / TARGET</span><h1>Where do you want<br>to <em>go next?</em></h1><p>We’ll compare your resume against the skills and signals that matter for your target role.</p><div class="uploaded-confirm"><span class="check-icon">✓</span><div><strong>Resume uploaded successfully</strong><span id="uploaded-file-label">resume.pdf · PDF</span></div><span class="status-pill">Ready</span></div></div><div class="job-panel"><div class="mode-tabs" role="tablist"><button class="mode-tab active" data-mode="role" type="button">Select job role</button><button class="mode-tab" data-mode="description" type="button">Paste description</button></div><div id="role-mode"><label class="field-label" for="job-search">What job are you applying for?</label><div class="search-wrap"><span>⌕</span><input id="job-search" type="search" placeholder="Search 164 job roles..." autocomplete="off"><span class="role-count">164</span></div><div class="role-menu hidden" id="role-menu"></div><div class="selected-role hidden" id="selected-role"><span>Target role</span><strong id="selected-role-name"></strong><button type="button" id="clear-role" aria-label="Clear selected role">×</button></div></div><div id="description-mode" class="hidden"><label class="field-label" for="job-description">Paste a job description</label><textarea id="job-description" placeholder="Paste the job description you want to match against..."></textarea><p class="field-hint">We’ll extract the important signals for your comparison.</p></div><button class="primary-button wide-button" id="analyze-button" type="button" disabled>Analyze my resume <span>→</span></button><p class="api-note"><span>✦</span> Your analysis is powered by NLP signals and weighted scoring.</p></div></div>
+      </section>
+
+      <section id="loading-view" class="view"><div class="loading-card"><div class="orbital-mark"><span></span><span></span><span></span></div><span class="section-label">RESUMEAI ENGINE</span><h1>Reading between<br>the <em>lines...</em></h1><p class="loading-copy">We’re translating your experience into a clearer signal.</p><div class="analysis-list" id="analysis-list"></div><div class="loading-bar"><span id="loading-bar-progress"></span></div><span class="loading-percent" id="loading-percent">0%</span></div></section>
+
+      <section id="results-view" class="view"><div class="dashboard-head"><div><span class="section-label">ANALYSIS REPORT</span><h1>Your resume, <em>decoded.</em></h1><p>Here’s how your experience lines up with <strong id="result-role">Data Scientist</strong>.</p></div><button class="secondary-button" id="new-analysis" type="button">＋ New analysis</button></div><div class="score-grid"><div class="score-card"><div class="score-card-top"><div><span class="card-label">ATS SCORE</span><strong class="score-value" id="score-value">82<small>/ 100</small></strong><span class="match-status">Good match</span></div><div class="score-ring" id="score-ring"><span>82</span></div></div><div class="score-breakdown"><span>Weighted score</span><span>0 <b>100</b></span></div><div class="mini-track"><span style="width:82%"></span></div></div><div class="metric-card"><span class="metric-icon blue">⌁</span><span class="card-label">JOB MATCH</span><strong>84<small>%</small></strong><p>Strong alignment with this role</p></div><div class="metric-card"><span class="metric-icon green">#</span><span class="card-label">KEYWORD MATCH</span><strong>78<small>%</small></strong><p>Relevant terms found in your resume</p></div><div class="metric-card"><span class="metric-icon orange">◈</span><span class="card-label">STRUCTURE</span><strong>90<small>%</small></strong><p>Easy for an ATS to scan</p></div></div>
+        <div class="dashboard-grid"><div class="dashboard-main"><div class="content-card skills-card"><div class="card-heading"><div><span class="section-label">SKILL SIGNALS</span><h2>What’s coming through</h2></div><span class="signal-count">6 matched</span></div><div class="skill-columns"><div><h3><span class="good-dot">✓</span> Matched skills</h3><div class="chips" id="matched-skills"></div></div><div><h3><span class="warn-dot">!</span> Missing / recommended</h3><div class="chips missing" id="missing-skills"></div><p class="honesty-note">Only add skills you genuinely possess or have relevant experience with.</p></div></div></div><div class="content-card"><div class="card-heading"><div><span class="section-label">DIAGNOSTIC</span><h2>Resume weaknesses</h2></div><span class="muted-label">5 signals</span></div><div class="weakness-list" id="weakness-list"></div></div><div class="content-card"><div class="card-heading"><div><span class="section-label">ACTION PLAN</span><h2>How to improve your resume</h2></div></div><div class="suggestion-list" id="suggestion-list"></div></div></div><aside class="dashboard-side"><div class="content-card section-analysis"><div class="card-heading"><div><span class="section-label">COVERAGE</span><h2>Resume sections</h2></div></div><div id="section-statuses"></div></div><div class="content-card keywords-card"><span class="section-label">KEYWORD ANALYSIS</span><h2>Important signals</h2><div class="keyword-group"><span class="keyword-label matched-label">MATCHED</span><div class="keyword-pills" id="matched-keywords"></div></div><div class="keyword-group"><span class="keyword-label missing-label">MISSING</span><div class="keyword-pills" id="missing-keywords"></div></div></div><details class="content-card nlp-card"><summary><span><span class="section-label">UNDER THE HOOD</span><strong>NLP analysis</strong></span><span class="details-arrow">＋</span></summary><div class="nlp-list">Text extraction · Tokenization · Stopword removal · Lemmatization · POS tagging · Named Entity Recognition · Skill extraction · TF-IDF · Cosine similarity</div></details></aside></div><div class="improve-banner"><div><span class="section-label">KEEP GOING</span><h2>Make the next version<br><em>even stronger.</em></h2><p>Update your resume using the suggestions above and upload the corrected version to measure your improvement.</p></div><div style="display:flex; gap:12px; align-items:center;"><button class="primary-button" id="corrected-upload-button" type="button">Upload corrected resume <span>↗</span></button><button class="secondary-button" id="edit-resume-button" type="button">Edit resume text <span>✎</span></button></div><input id="corrected-input" type="file" accept="application/pdf,.pdf" hidden></div></section>
+
+      <section id="edit-view" class="view">
+        <div class="dashboard-head">
+          <div><span class="section-label">RESUME EDITOR</span><h1>Edit your <em>content.</em></h1><p>Make changes directly to your parsed resume text.</p></div>
+          <button class="primary-button" id="save-edit-button" type="button">Analyze Changes <span>→</span></button>
+        </div>
+        <div class="content-card" style="margin-top: 24px;">
+          <textarea id="resume-text-editor" style="width:100%; height:500px; padding:16px; border:1px solid #e0e4ef; border-radius:8px; font-family:inherit; font-size:15px; resize:vertical;"></textarea>
+        </div>
+      </section>
+
+      <section id="comparison-view" class="view"><div class="comparison-head"><span class="section-label">RESUME IMPROVEMENT</span><h1>Progress you can<br><em>prove.</em></h1><p>Same target role, new signal. Here’s what changed.</p></div><div class="comparison-score"><div class="compare-score-block before"><span>BEFORE</span><strong><span id="before-score">82</span><small>/ 100</small></strong><div class="compare-track"><i id="before-score-bar" style="width:82%"></i></div></div><div class="improvement-badge"><span id="improvement-score">+0</span> <span>points</span></div><div class="compare-score-block after"><span>AFTER</span><strong><span id="after-score">82</span><small>/ 100</small></strong><div class="compare-track"><i id="after-score-bar" style="width:82%"></i></div></div></div><div class="compare-metrics"><div><span>Matched skills</span><strong><span id="before-skills">6</span> <b>→</b> <span id="after-skills">6</span></strong></div><div><span>Keyword match</span><strong><span id="before-keywords">78%</span> <b>→</b> <span id="after-keywords">78%</span></strong></div><div><span>Resume structure</span><strong><span id="before-structure">90%</span> <b>→</b> <span id="after-structure">90%</span></strong></div></div><div class="comparison-bottom"><div class="content-card"><span class="section-label">THE DELTA</span><h2>What improved?</h2><ul class="improved-list"><li>Professional summary became specific</li><li>Relevant keywords were added</li><li>Project descriptions gained measurable impact</li><li>Skills section became easier to scan</li></ul></div><div class="content-card still-missing"><span class="section-label">NEXT HORIZON</span><h2>Still missing</h2><div class="chips missing"><span>Power BI</span><span>Tableau</span></div><p>Build these skills, then let your resume tell that story.</p></div></div><button class="secondary-button" id="comparison-new-analysis" type="button">Start another analysis</button></section>
+      
+      <section id="templates-view" class="view">
+        <div class="dashboard-head">
+          <div><span class="section-label">RESUME BUILDER</span><h1>Choose a <em>template.</em></h1><p>Start with a proven layout and edit it directly in your browser.</p></div>
+        </div>
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:24px; margin-top:32px;">
+          <div class="template-card" data-template="minimalist"><h3>Minimalist</h3><div class="template-preview minimalist-preview"></div></div>
+          <div class="template-card" data-template="professional"><h3>Professional</h3><div class="template-preview professional-preview"></div></div>
+          <div class="template-card" data-template="creative"><h3>Creative</h3><div class="template-preview creative-preview"></div></div>
+        </div>
+      </section>
+
+      <section id="template-editor-view" class="view">
+        <div class="dashboard-head">
+          <div><span class="section-label">LIVE EDITOR</span><h1>Make it <em>yours.</em></h1><p>Click anywhere on the resume to edit the text.</p></div>
+          <div style="display:flex; gap:12px;">
+              <button class="secondary-button" id="back-to-templates" type="button">Change Template</button>
+              <button class="primary-button" onclick="window.print()" type="button">Save as PDF <span>↓</span></button>
+          </div>
+        </div>
+        <div style="background:#f4f5f8; padding:40px; display:flex; justify-content:center; border-radius:12px; margin-top:24px; overflow-x:auto;">
+          <div id="active-resume-template" style="background:white; width:210mm; min-height:297mm; padding:20mm; box-shadow:0 10px 30px rgba(0,0,0,0.1); outline:none;" contenteditable="true">
+          </div>
+        </div>
+      </section>
+    </main>
+    <footer id="about"><span>© 2026 ResumeAI</span><span>Thoughtful feedback for ambitious people.</span><span>Built for better applications.</span></footer>
+  </div>
+  <script src="app.js"></script>
+</body>
+</html>
