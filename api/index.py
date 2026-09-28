@@ -10,7 +10,7 @@ from PyPDF2 import PdfReader
 
 app = Flask(__name__, static_folder=".", static_url_path="")
 
-RESUMES: dict[str, dict[str, Any]] = {}
+
 
 
 @app.after_request
@@ -127,6 +127,7 @@ def analyze_text(text: str, role: str | None, description: str | None) -> dict[s
     }
 
 
+
 @app.post("/upload")
 def upload_resume():
     file = request.files.get("resume")
@@ -138,51 +139,52 @@ def upload_resume():
     except Exception as error:
         return jsonify({"error": f"Could not read this PDF: {error}"}), 400
     resume_id = uuid.uuid4().hex
-    RESUMES[resume_id] = {"bytes": file_bytes, "text": text, "filename": file.filename, "analysis": None}
-    return jsonify({"resume_id": resume_id, "filename": file.filename, "text_length": len(text)})
-
+    return jsonify({"resume_id": resume_id, "filename": file.filename, "text": text, "text_length": len(text)})
 
 @app.post("/analyze")
 def analyze_resume():
     payload = request.get_json(silent=True) or {}
-    record = RESUMES.get(payload.get("resume_id"))
-    if not record:
-        return jsonify({"error": "Resume upload not found. Please upload it again."}), 404
-    result = analyze_text(record["text"], payload.get("job_role"), payload.get("job_description"))
-    record["analysis"] = result
-    record["job_role"] = payload.get("job_role")
-    record["job_description"] = payload.get("job_description")
+    text = payload.get("text")
+    if not text:
+        return jsonify({"error": "Missing resume text."}), 400
+    result = analyze_text(text, payload.get("job_role"), payload.get("job_description"))
     return jsonify(result)
-
 
 @app.post("/analyze-corrected")
 def analyze_corrected():
     file = request.files.get("resume")
-    resume_id = request.form.get("resume_id")
-    original = RESUMES.get(resume_id)
-    if not file or not original:
-        return jsonify({"error": "Original resume session not found."}), 400
+    original_text = request.form.get("original_text", "")
+    job_role = request.form.get("job_role")
+    job_description = request.form.get("job_description")
+    
+    if not file:
+        return jsonify({"error": "No file uploaded."}), 400
     corrected_bytes = file.read()
     try:
         corrected_text = extract_text(corrected_bytes)
     except Exception as error:
         return jsonify({"error": f"Could not read this PDF: {error}"}), 400
-    result = analyze_text(corrected_text, original.get("job_role"), original.get("job_description"))
-    return jsonify({"before": original.get("analysis"), "after": result, "same_file": corrected_bytes == original["bytes"]})
-
+        
+    result = analyze_text(corrected_text, job_role, job_description)
+    original_analysis = analyze_text(original_text, job_role, job_description) if original_text else None
+    
+    return jsonify({"before": original_analysis, "after": result, "same_file": corrected_text == original_text})
 
 @app.post("/analyze-edited-text")
 def analyze_edited_text():
     payload = request.get_json(silent=True) or {}
-    resume_id = payload.get("resume_id")
     corrected_text = payload.get("text")
-    original = RESUMES.get(resume_id)
-    if not original or not corrected_text:
-        return jsonify({"error": "Original resume session not found."}), 400
-    result = analyze_text(corrected_text, original.get("job_role"), original.get("job_description"))
-    return jsonify({"before": original.get("analysis"), "after": result, "same_file": corrected_text == original["text"]})
-
-
+    original_text = payload.get("original_text", "")
+    job_role = payload.get("job_role")
+    job_description = payload.get("job_description")
+    
+    if not corrected_text:
+        return jsonify({"error": "Missing edited text."}), 400
+        
+    result = analyze_text(corrected_text, job_role, job_description)
+    original_analysis = analyze_text(original_text, job_role, job_description) if original_text else None
+    
+    return jsonify({"before": original_analysis, "after": result, "same_file": corrected_text == original_text})
 @app.get("/")
 def index():
     return send_from_directory(".", "index.html")

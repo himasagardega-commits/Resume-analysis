@@ -89,7 +89,7 @@ async function uploadToBackend(file){
 
 async function analyzeWithBackend(){
 	if(!state.resumeId) return;
-	const response=await fetch(`${API_BASE}/analyze`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({resume_id:state.resumeId,job_role:state.mode==='role'?state.job:null,job_description:state.mode==='description'?$('#job-description').value:null})});
+	const response=await fetch(`${API_BASE}/analyze`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text:state.extractedText,job_role:state.mode==='role'?state.job:null,job_description:state.mode==='description'?$('#job-description').value:null})});
 	if(!response.ok) throw new Error('Backend analysis failed');
 	return response.json();
 }
@@ -132,7 +132,7 @@ function renderSuggestions(suggestions){
 }
 
 $('#continue-button').addEventListener('click',()=>{
-	state.uploadPromise=uploadToBackend(state.file).then(data=>{state.resumeId=data.resume_id; return data;}).catch(()=>null);
+	state.uploadPromise=uploadToBackend(state.file).then(data=>{state.resumeId=data.resume_id; state.extractedText=data.text; return data;}).catch(()=>null);
 });
 
 $('#analyze-button').addEventListener('click',()=>{
@@ -148,7 +148,7 @@ $('#corrected-input').addEventListener('change',event=>{
 	showView('loading');
 	$('#loading-percent').textContent='Analyzing corrected resume';
 	const body=new FormData();
-	body.append('resume',file); body.append('resume_id',state.resumeId);
+	body.append('resume',file); body.append('original_text',state.extractedText||''); body.append('job_role',state.mode==='role'?state.job:''); body.append('job_description',state.mode==='description'?$('#job-description').value:'');
 	fetch(`${API_BASE}/analyze-corrected`,{method:'POST',body}).then(response=>response.ok?response.json():null).then(data=>{
 		if(!data||!data.after) return;
 		state.correctedFile=file;
@@ -182,7 +182,7 @@ $('#save-edit-button')?.addEventListener('click', () => {
     fetch(`${API_BASE}/analyze-edited-text`, {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({ resume_id: state.resumeId, text: newText })
+        body: JSON.stringify({ text: newText, job_role:state.mode==='role'?state.job:null, job_description:state.mode==='description'?$('#job-description').value:null, original_text: state.extractedText })
     }).then(response => response.ok ? response.json() : null).then(data => {
         if(!data || !data.after) return;
         state.beforeScore = data.before.score;

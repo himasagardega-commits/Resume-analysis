@@ -1,0 +1,20 @@
+{
+  "rewrites": [
+    {
+      "source": "/upload",
+      "destination": "/api/index"
+    },
+    {
+      "source": "/analyze",
+      "destination": "/api/index"
+    },
+    {
+      "source": "/analyze-edited-text",
+      "destination": "/api/index"
+    },
+    {
+      "source": "/analyze-corrected",
+      "destination": "/api/index"
+    }
+  ]
+}
