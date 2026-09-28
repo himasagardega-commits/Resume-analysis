@@ -8,7 +8,10 @@ from typing import Any
 from flask import Flask, jsonify, request, send_from_directory
 from PyPDF2 import PdfReader
 
-app = Flask(__name__, static_folder=".", static_url_path="")
+import os
+
+base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+app = Flask(__name__, static_folder=base_dir, static_url_path="")
 
 
 
@@ -185,9 +188,15 @@ def analyze_edited_text():
     original_analysis = analyze_text(original_text, job_role, job_description) if original_text else None
     
     return jsonify({"before": original_analysis, "after": result, "same_file": corrected_text == original_text})
-@app.get("/")
-def index():
-    return send_from_directory(".", "index.html")
+@app.route('/', defaults={'path': ''})
+@app.route('/<path:path>')
+def serve(path):
+    if path != "" and os.path.exists(os.path.join(base_dir, path)):
+        return send_from_directory(base_dir, path)
+    else:
+        return send_from_directory(base_dir, 'index.html')
+
+
 
 
 if __name__ == "__main__":
