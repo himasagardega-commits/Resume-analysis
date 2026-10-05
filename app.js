@@ -279,12 +279,16 @@ layouts.forEach((layoutFn, lIdx) => {
             const title = `Layout ${lIdx + 1} &middot; ${color.name} &middot; ${font.name}`;
             generatedTemplates[id] = layoutFn(color.main, color.bg, font.family);
             
-            // Create a mini-preview style
-            const previewStyle = `background: ${color.bg}; border-top: 15px solid ${color.main};`;
+                        const rawHtml = layoutFn(color.main, color.bg, font.family);
+            generatedTemplates[id] = rawHtml;
             
-            gridHtml.push(`<div class="template-card" data-template="${id}">
+            gridHtml.push(`<div class="template-card" data-template="${id}" style="cursor:pointer; overflow:hidden;">
                 <h3 style="font-size:13px; margin:0 0 10px 0; font-family:var(--font-sans); color:#333;">${title}</h3>
-                <div class="template-preview" style="${previewStyle} height: 160px;"></div>
+                <div class="template-preview" style="height: 280px; overflow: hidden; position: relative; border: 1px solid #ddd; border-radius: 6px; background: ${color.bg}; box-shadow: inset 0 0 10px rgba(0,0,0,0.02);">
+                    <div style="width: 210mm; min-height: 297mm; transform: scale(0.35); transform-origin: top left; pointer-events: none; position: absolute; top:0; left:0;">
+                        ${rawHtml}
+                    </div>
+                </div>
             </div>`);
             tIndex++;
         });
